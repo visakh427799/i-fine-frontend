@@ -10,7 +10,7 @@ function signup() {
   const router=useRouter()
 
 useEffect(()=>{
-  let u_id=localStorage.getItem("user_profile_id");
+  let u_id=localStorage.getItem("user_id");
   if(u_id!=undefined){
     router.push('/userProfile')
   }
