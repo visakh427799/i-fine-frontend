@@ -3,9 +3,16 @@
   import { Fragment } from 'react'
   import { Disclosure, Menu, Transition } from '@headlessui/react'
   import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
-  
+  import { useRouter } from 'next/router'
+  import { useEffect,useState } from 'react'
+  import axios from 'axios'
   const navigation = [
     { name: 'Home', href: '/', current: false },
+    { name: 'My profile', href: '/userProfile', current: false },
+    { name: 'Medicine', href: '/medicine', current: false },
+    { name: 'My Doctors', href: '/', current: false },
+    { name: 'Appointments', href: '/appointments', current: false },
+    { name: 'Self checks', href: '/selfCheck', current: false },
     
   ]
   
@@ -14,6 +21,44 @@
   }
   
   export default function userNavbar() {
+
+    const router=useRouter();
+    const [user, setUser] = useState()
+  
+    
+    useEffect(() => {
+     
+      
+        
+        let u_id=localStorage.getItem("user_id");
+  
+        if(u_id){
+  
+          axios.post('http://localhost:5000/admin/getUserDetails',{u_id}).then((resp) => {
+            if (resp.data.success) {
+              setUser(resp.data.data)
+              console.log(resp.data.data);
+            }
+    
+          }).catch((err) => {
+    
+          })
+        }
+        else{
+           router.push('/signin')
+        }
+    
+    
+  
+    },[])
+
+    const handleLogout=()=>{
+      localStorage.removeItem('user_id')
+      router.push('/signin')
+
+    }
+
+    
     return (
       <Disclosure as="nav" className="bg-blue-800">
         {({ open }) => (
@@ -53,25 +98,24 @@
                     </div>
                   </div>
                 </div>
-                <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                  <button
-                    type="button"
-                    className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                  >
-                    <span className="sr-only">View notifications</span>
-                    <BellIcon className="h-6 w-6" aria-hidden="true" />
-                  </button>
+                <div className="absolute  right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                <button type="button" onClick={handleLogout} class="inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out">Logout</button>
+
   
                   {/* Profile dropdown */}
                   <Menu as="div" className="ml-3 relative">
                     <div>
                       <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                         <span className="sr-only">Open user menu</span>
-                        <img
+                        {
+                          user?
+                          <img
                           className="h-8 w-8 rounded-full"
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          src={user.dat2.photo}
                           alt=""
-                        />
+                        />:<></>
+                        }
+                        
                       </Menu.Button>
                     </div>
                     <Transition

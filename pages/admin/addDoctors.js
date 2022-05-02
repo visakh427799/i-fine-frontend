@@ -81,7 +81,7 @@ function addDoctors() {
           })
           setDoctor(X)
           setCount(true)
-          localStorage.setItem(resp.data.doctor_id)
+          localStorage.setItem('doctor_id',resp.data.doctor_id)
           
         }
         else{

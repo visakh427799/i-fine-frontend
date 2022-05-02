@@ -3,6 +3,7 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
+import { useRouter } from 'next/router'
 
 const navigation = [
   { name: 'Home', href: '/', current: false },
@@ -19,6 +20,13 @@ function classNames(...classes) {
 }
 
 export default function adminNavbar() {
+  const router =useRouter()
+
+  const handleLogout=()=>{
+    localStorage.removeItem('admin_logged')
+    router.push('/signin')
+
+  }
   return (
     <Disclosure as="nav" className="bg-blue-800">
       {({ open }) => (
@@ -60,9 +68,11 @@ export default function adminNavbar() {
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                
-
+                  <button type="button" onClick={handleLogout} class="inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out">Logout</button>
+                       
                 {/* Profile dropdown */}
                 <Menu as="div" className="ml-3 relative">
+                  
                   <div>
                     <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                       <span className="sr-only">Open user menu</span>

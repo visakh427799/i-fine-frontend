@@ -80,8 +80,7 @@ useEffect(()=>{
 
           </div>
     
-          <main className="mt-2 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-4 lg:px-4 xl:mt-20">
-          <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+          <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-2">
           <div className="max-w-md w-full space-y-8 w-80">
          
             <input type="hidden" name="remember" defaultValue="true" />
@@ -186,7 +185,6 @@ useEffect(()=>{
          
           </div>
           </div>
-          </main>
         </div>
       </div>
       <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 mt-20">

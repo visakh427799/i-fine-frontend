@@ -3,11 +3,13 @@ import AdminNavbar from '../../Components/adminNavbar'
 import {useEffect,useState} from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
+import CircularProgress from '@mui/material/CircularProgress';
 import Swal from 'sweetalert2'
 
 function allDoctors() {
 
   const [deleted,setDeleted]=useState(false)
+  const [loading,setLoading]=useState(false)
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
@@ -42,6 +44,8 @@ function allDoctors() {
         router.push(`/admin/userProfileView/?u_id=${u_id}`)
       }
      const  handleDelete   = (doctor_id)=>{
+      // setDeleted(false)
+      setLoading(true)
       axios.post("http://localhost:5000/admin/deleteDoctor",{doctor_id}).then((resp)=>{
         if(resp.data.success){
           console.log(resp.data.success);
@@ -50,6 +54,7 @@ function allDoctors() {
             title: 'Doctor deleted ...!!'
           })
           setDeleted(true)
+          setLoading(false)
          
         }
         else{
@@ -57,6 +62,7 @@ function allDoctors() {
             icon: 'error',
             title: 'Something went wrong...!!'
           })
+          setLoading(false)
         }
       })
      }
@@ -121,7 +127,13 @@ function allDoctors() {
 
                         </td>
                         <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                        {/* {
+                          loading?<CircularProgress color="secondary" />:
                         <button type="button" class="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out" onClick={()=>{handleDelete(d._id)}}>Delete</button>
+                          
+                        } */}
+                        <button type="button" class="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out" onClick={()=>{handleDelete(d._id)}}>Delete</button>
+                        
 
                         </td>
                         

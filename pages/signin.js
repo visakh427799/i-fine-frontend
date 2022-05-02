@@ -5,8 +5,9 @@ import Dropdown from '../Components/dropdown'
 import { Fragment,useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
+import Swal from 'sweetalert2'
 import {useRouter} from 'next/router'
-
+import axios from 'axios'
 const people = [
   {
     id: 1,
@@ -44,6 +45,50 @@ useEffect(()=>{
 },[])
 
   const [selected, setSelected] = useState(people[1])
+  const [user,setUser]=useState({
+    email:"",
+    password:""
+  })
+  const handleChange =(e)=>{
+    setUser({...user,[e.target.name]:e.target.value})
+  }
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }})
+
+  const handleSubmit= ()=>{
+     if(user.email=="admin@gmail.com" && user.password=="admin"){
+       localStorage.setItem("admin_logged",true)
+       router.push('/admin/adminHome')
+     }
+     else{
+       //user login
+       axios.post("http://localhost:5000/signin",user).then((resp)=>{
+          if(resp.data.success){
+            localStorage.setItem('user_id',resp.data.u_id)
+            router.push('/userProfile')
+          }
+          else{
+            Toast.fire({
+              icon: 'error',
+              title: 'Invalid credentials...!!'
+            })
+          }
+       }).catch(()=>{
+        Toast.fire({
+          icon: 'error',
+          title: 'Something went wrong...!!'
+        })
+       })
+     }
+  }
   return (
    <div>
 
@@ -59,7 +104,7 @@ useEffect(()=>{
             <h2 className="mt-6 text-center text-3xl  text-gray-900">Sign in </h2>
             
           </div>
-          <form className="mt-8 space-y-6 " action="#" method="POST">
+         
             <input type="hidden" name="remember" defaultValue="true" />
             <div className="rounded-md shadow-sm -space-y-px">
               <div>
@@ -70,6 +115,7 @@ useEffect(()=>{
                   id="email-address"
                   name="email"
                   type="email"
+                  onChange={handleChange}
                   autoComplete="email"
                   required
                   className=" mt-8 appearance-none rounded-none relative block w-full px-4 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
@@ -84,6 +130,7 @@ useEffect(()=>{
                   id="password"
                   name="password"
                   type="password"
+                  onChange={handleChange}
                   autoComplete="current-password"
                   required
                   className="mt-8 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
@@ -105,14 +152,15 @@ useEffect(()=>{
               <button
                 type="submit"
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
+                onClick={handleSubmit}
+             >
                 <span className="absolute left-0 inset-y-0 flex items-center pl-3">
                   <LockClosedIcon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" />
                 </span>
                 Sign in
               </button>
             </div>
-          </form>
+         
         </div>
       </div>
       </div>

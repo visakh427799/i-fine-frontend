@@ -29,7 +29,7 @@ function DoctorPhotoUpload() {
     const  [loading,setLoading]=useState();
 
     const handleSubmit=()=>{
-        router.push('/userProfile')
+        router.push('/admin/allDoctors')
          
       }
       const Toast = Swal.mixin({
@@ -113,7 +113,7 @@ function DoctorPhotoUpload() {
               src="https://image.winudf.com/v2/image1/Y29tLmh1YXdlaS5waG9uZXNlcnZpY2VfaWNvbl8xNTU0OTkxMDc1XzA3Mw/icon.png?w=&fakeurl=1"
               alt="Workflow"
             />
-            <h2 className="mt-4 text-center text-3xl text-gray-900">Upload Files</h2>
+            <h2 className="mt-4 text-center text-3xl text-gray-900">Upload Doctor's Profile picture</h2>
 
           </div>
           <div class="bg-red-100 rounded-lg py-5 px-6 mb-3 text-base text-red-700 inline-flex items-center w-full" role="alert">
