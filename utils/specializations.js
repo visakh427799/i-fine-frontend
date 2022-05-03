@@ -49,6 +49,15 @@ const Specializations=()=>{
             
             In India, the average salary of a general surgeon is ₹1,145,156 per year.`
         },
+        {
+            type:"Cardiology",
+            description:`India is in high demand for surgeons. Primary health centers in India have only 16% of surgeons, where there is an 84% shortage. Therefore, approximately India is in need of 5,000 surgeons. This is a pressing issue and needs to be addressed immediately.
+
+            Becoming a surgeon is not easy and needs hard work, perseverance, and dedication. An MBBS degree is not enough to take up a surgeon role. A general surgeon should attain excellence with a PG medical course to get specialized as a surgeon with enhanced knowledge and application skills. A further upgradation is also advisable as the technology in the medical industry is growing at a faster pace.
+            
+            In India, the average salary of a general surgeon is ₹1,145,156 per year.`
+        },
+
 
     ]
 }

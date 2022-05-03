@@ -6,10 +6,12 @@ import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
 
 const navigation = [
-  { name: 'Home', href: '/', current: false },
+  { name: 'Home', href: '/admin/adminHome', current: false },
   { name: 'All users', href: '/admin/allUsers', current: false },
   { name: 'All doctors', href: '/admin/allDoctors', current: false },
   { name: 'Add Doctor', href: '/admin/addDoctors', current: false },
+  { name: 'Add Specializations', href: '/admin/addSpecializations', current: false },
+  { name: 'Specializations', href: '/admin/allSpecializations', current: false },
   // { name: 'All users', href: '/admin/allUsers', current: false },
 
  
