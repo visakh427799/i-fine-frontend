@@ -1,12 +1,20 @@
 import React from 'react'
 import AdminNavbar from '../../Components/adminNavbar'
-import {useState} from 'react'
+import {useState,useEffect} from 'react'
 import {useRouter}  from 'next/router'
 import Specilaizations from '../../utils/specializations'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import DoctorPhotoUpload from './doctorPhotoUpload'
 function addDoctors() {
+const [specs,setSpecs]=useState([])
+useEffect(()=>{
+    axios.get('http://localhost:5000/getAllSpecializations').then((resp)=>{
+      if(resp.data.success){
+         setSpecs(resp.data.data)
+      }
+    })
+},[])
 
   const DoctorSpec=Specilaizations()
   console.log(DoctorSpec);
@@ -164,9 +172,13 @@ function addDoctors() {
     focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example">
       <option selected>Specializations</option>
       {
-        DoctorSpec.map((spec)=>{
+        specs.map((s)=>{
           return(
-            <option name="specialization" value={spec.type}>{spec.type}</option>
+            <option name="specialization" value={s.
+              specialization_type
+              }>{s.
+                specialization_type
+                }</option>
           )
         })
       }

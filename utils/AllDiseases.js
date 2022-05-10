@@ -4,7 +4,11 @@ const AllDiseases=()=>{
         "Fever",
         "Acne",
         "Runny nose",
-        "Cough",
+        "Cough & cold",
+        "Dengue",
+        " Malaria",
+        "Typhoid",
+        "Flu",
         "Headache",
         "Hairfall",
         "Vomiting/Nausea",
@@ -21,7 +25,33 @@ const AllDiseases=()=>{
         "High bp",
         "Low bp",
         "Migraine",
-        "Back pain"
+        "Back pain",
+        "Ovarian cysts",
+        "Pelvic pain",
+        "Polycystic ovarian syndrome",
+        "Genital tract infections",
+        "Vulva and vaginal skin disorders",
+        "postpartum care",
+        "infertility diagnosis and treatement",
+        "Pregnancy",
+        "Menopause",
+        "Osteoporosis",
+        "Arthritis",
+        "Bursitis",
+        "Pain in hips, knee ,joints,muscles,foot or ankle",
+        "Malignant bone tumours",
+        "Fractures of the bone",
+        "Anemia",
+        "PCOD",
+        "Thyroid",
+        "Diabetes",
+        "Vitamin deficiency",
+        "Hypertension",
+        "Cholesterol"
+
+
+
+
 
 
     ]

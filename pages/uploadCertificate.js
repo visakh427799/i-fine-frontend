@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
-import NavbarSignup from '../Components/navbarSignup'
+import React from 'react'
+import UserNavbar from '../Components/userNavbar'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import {useRouter} from 'next/router'
 // import storage from 'firebase/storage'
+import {useState,useEffect} from 'react'
 import {storage} from '../firebase'
 import {
   ref as storageRef,
@@ -12,24 +13,19 @@ import {
   listAll,
   list,
 } from "firebase/storage";
+function uploadCertificate() {
 
 
-
-function photoUpload() {
-
-
-
-
-
+    
     const router = useRouter()
     const [photo,setPhoto]=useState("")
     const [uploaded,setUploaded]=useState(false)
     const [url,setUrl]=useState("")
-    const [imgUrl,setImgUrl]=useState();
+    const [file_url,setFileUrl]=useState("");
     const  [loading,setLoading]=useState();
 
     const handleSubmit=()=>{
-        router.push('/userProfile')
+        router.push('/certificates')
          
       }
       const Toast = Swal.mixin({
@@ -53,7 +49,7 @@ function photoUpload() {
        
        const handleSubmitCertificate = (event) => {
          
-         let u_id = localStorage.getItem('user_id');
+       
          
          if(photo==""){
            Toast.fire({
@@ -61,38 +57,50 @@ function photoUpload() {
              title: 'Please select a file first...!!'
            })
          }else{
-          setLoading(true)
+         
              console.log(photo);
-             const imageRef =storageRef(storage, `users/${photo.name}`);
-    uploadBytes(imageRef, photo).then((snapshot) => {
-      getDownloadURL(snapshot.ref).then((url) => {
-       console.log(url);
-       setImgUrl(url)
-    let u_id=localStorage.getItem("user_id")
-     
-       axios.post('http://localhost:5000/photo-upload', {url,u_id}).then((resp) => {
-           if (resp.data.success) {
-             Toast.fire({
-               icon: 'success',
-               title: 'Uploaded...!!'
-             })
-             setUploaded(true)
-             setLoading(false)
-            
-           }
-           else{
-             Toast.fire({
-               icon: 'error',
-               title: 'Something went wrong...!!'
-             })
-           }
+             console.log(photo.size, typeof(photo.size));
+             if(photo.size>2000000){
+             
+                Toast.fire({
+                  icon: 'error',
+                  title: 'File size should be less than 2 mb...!!'
+                })
+             }
+             else{
+               
+               setLoading(true)
+             const imageRef =storageRef(storage, `certificates/${photo.name}`);
+             uploadBytes(imageRef, photo).then((snapshot) => {
+             getDownloadURL(snapshot.ref).then((url) => {
+            //  console.log(url);
+             setFileUrl(url)
+             let u_id=localStorage.getItem("user_id")
+             console.log(file_url);
+             axios.post('http://localhost:5000/uploadCertificate', {url,u_id}).then((resp) => {
+                    if (resp.data.success) {
+                      Toast.fire({
+                        icon: 'success',
+                        title: 'Uploaded...!!'
+                      })
+                      setUploaded(true)
+                      setLoading(false)
+                      
+                    }
+                    else{
+                      Toast.fire({
+                        icon: 'error',
+                        title: 'Something went wrong...!!'
+                      })
+                    }
          })
 
-    });
+       });
   })
+   }
           
-       }
-      }
+ }
+}
 
        const handleAlert=()=>{
         Toast.fire({
@@ -103,8 +111,8 @@ function photoUpload() {
      
   return (
     <div>
-         <NavbarSignup/>
-         <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <UserNavbar/>
+        <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8 w-80">
           <div>
             <img
@@ -112,14 +120,14 @@ function photoUpload() {
               src="https://image.winudf.com/v2/image1/Y29tLmh1YXdlaS5waG9uZXNlcnZpY2VfaWNvbl8xNTU0OTkxMDc1XzA3Mw/icon.png?w=&fakeurl=1"
               alt="Workflow"
             />
-            <h2 className="mt-4 text-center text-3xl text-gray-900">Upload Profile Picture</h2>
+            <h2 className="mt-4 text-center text-3xl text-gray-900">Upload your certificate</h2>
 
           </div>
-          <div class="bg-red-100 rounded-lg py-5 px-6 mb-3 text-base text-red-700 inline-flex items-center w-full" role="alert">
+          <div class="bg-red-400 rounded-lg py-5 px-6 mb-3 text-base text-white-100 inline-flex items-center w-full" role="alert">
   <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" class="w-4 h-4 mr-2 fill-current" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
     <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path>
   </svg>
-  The file should be image
+  <h1 className='text-white'>file size should be less than 2 mb</h1>
 </div>
 
           <input type="hidden" name="remember" defaultValue="true" />
@@ -236,10 +244,10 @@ function photoUpload() {
           </div>
         </div>
       </div>
-    
-        
+
+
     </div>
   )
 }
 
-export default photoUpload
+export default uploadCertificate

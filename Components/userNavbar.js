@@ -13,6 +13,9 @@
     { name: 'My Doctors', href: '/', current: false },
     { name: 'Appointments', href: '/appointments', current: false },
     { name: 'Self checks', href: '/selfCheck', current: false },
+    { name: 'Consultations', href: '/Consultations', current: false },
+    { name: 'Certificates', href: '/certificates', current: false },
+    { name: 'Upload files', href: '/uploadCertificate', current: false },
     
   ]
   

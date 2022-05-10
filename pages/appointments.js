@@ -143,7 +143,7 @@ function appointments() {
 
 return(
   <div className='ml-1'>
-  <Card sx={{ maxWidth: 280 }}>
+  <Card sx={{ maxWidth: 280 }} >
   <CardMedia
     component="img"
     alt="Image"

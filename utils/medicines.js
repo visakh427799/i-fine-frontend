@@ -1,0 +1,3 @@
+const getMedicines=()=>{
+    let arr=[]
+}

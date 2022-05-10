@@ -21,6 +21,8 @@
     "next": "12.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "simple-peer": "^9.11.1",
+    "socket.io-client": "^4.5.0",
     "sweetalert2": "^11.4.9"
   },
   "devDependencies": {

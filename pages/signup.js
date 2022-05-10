@@ -42,23 +42,39 @@ useEffect(()=>{
 
   }
   const handleSubmit=()=>{
-    if(user){
-      axios.post("http://localhost:5000/signup",user).then((resp)=>{
-        console.log(resp.data);
-        if(resp.data.success){
-              localStorage.setItem("user_id",resp.data.user_id)
-              router.push('/completeProfile')
-        }
-        else{
-          Toast.fire({
-            icon: 'error',
-            title: 'User with this mail id already exist...!!'
-          })
-        }
-      }).catch((err)=>{
 
+    if(user.name=="" || user.email=="" || user.phone=="" || user.password=="" || user.password2=="" ){
+      console.log("inside");
+
+      Toast.fire({
+        icon: 'error',
+        title: 'Please provide a valid input....!!'
       })
     }
+    else{
+
+      if(user){
+        axios.post("http://localhost:5000/signup",user).then((resp)=>{
+          console.log(resp.data);
+          if(resp.data.success){
+                localStorage.setItem("user_id",resp.data.user_id)
+                router.push('/completeProfile')
+          }
+          else{
+            Toast.fire({
+              icon: 'error',
+              title: 'User with this mail id already exist...!!'
+            })
+          }
+        }).catch((err)=>{
+  
+        })
+      }
+      
+    }
+
+
+    
   }
   return (
    <div>
@@ -95,7 +111,7 @@ useEffect(()=>{
                   onChange={handleChange}
                   name="name"
                   type="text"
-                  autoComplete="email"
+                  autoComplete="name"
                   required
                   className=" mt-8 appearance-none rounded-none relative block w-full px-4 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                   placeholder="Enter your name"
