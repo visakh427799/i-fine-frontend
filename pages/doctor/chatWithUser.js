@@ -13,7 +13,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
-import UserNavbar from '../Components/userNavbar'
+import DoctorNavar from '../../Components/doctorNavbar'
 import {useState,useEffect} from 'react'
 import axios from 'axios'
 
@@ -37,12 +37,12 @@ const useStyles = makeStyles({
   }
 });
 
-const chatWithDoctor = () => {
+const chatWithUser = () => {
 
     const [user, setUser] = useState()
     const [messages,setMessages]= useState([])
     const [message,setMessage]=useState("")
-    const [doctors,setDoctors]=useState([])
+    const [users,setUsers]=useState([])
     const [dt,setDt]=useState({
         name:"",
         url:"",
@@ -53,9 +53,9 @@ const chatWithDoctor = () => {
     useEffect(() => {
      
 
-        axios.get('http://localhost:5000/admin/getallDoctors').then((resp)=>{
+        axios.get('http://localhost:5000/admin/getallUsers').then((resp)=>{
             if(resp.data.data){
-                setDoctors(resp.data.data)
+                setUsers (resp.data.data)
                 console.log(resp.data.data);
             }
        }).catch((err)=>{
@@ -70,15 +70,43 @@ const chatWithDoctor = () => {
   
     },[])
 
-      const handleMessage=(doctor_id,d_name,d_url)=>{
-        let u_id=localStorage.getItem("user_id");
-        console.log(doctor_id,u_id);
+     
+    useEffect(() => {
+     
+      
+        
+        let d_id=localStorage.getItem("d_id");
+  
+        if(d_id){
+  
+          axios.post('http://localhost:5000/doctor/getDoctorDetails',{d_id}).then((resp) => {
+            if (resp.data.success) {
+              setUser(resp.data.dtr)
+              console.log(resp.data.dtr);
+            }
+    
+          }).catch((err) => {
+    
+          })
+        }
+        else{
+           router.push('/signin')
+        }
+    
+    
+  
+    },[])
+
+      const handleMessage=(u_id,d_name,d_url)=>{
+        let doctor_id=localStorage.getItem("d_id");
+       
         let obj={
             name:d_name,
             url:d_url,
         }
+        console.log(obj);
         setDt(obj)
-        setDoctor(doctor_id)
+        setDoctor(u_id)
         setLoad(true)
         axios.post('http://localhost:5000/getChats',{u_id,doctor_id}).then((resp) => {
             if (resp.data.success) {
@@ -98,14 +126,14 @@ const chatWithDoctor = () => {
       }
 
       const sendMessage =()=>{
-        let u_id=localStorage.getItem("user_id");
+        let d_id=localStorage.getItem("d_id");
       
-        axios.post('http://localhost:5000/sendMessage',{u_id,doctor,message}).then((resp) => {
+        axios.post('http://localhost:5000/sendMessage-user',{d_id,doctor,message}).then((resp) => {
             if (resp.data.success) {
               
               console.log(resp.data.success);
-              setMessage("")
               handleMessage(doctor,dt.name,dt.url)
+              setMessage("")
 
             }
     
@@ -118,7 +146,7 @@ const chatWithDoctor = () => {
 
   return (
       <div>
-          <UserNavbar/>
+          <DoctorNavar/>
         <Grid container>
             <Grid item xs={12} >
                 <Typography variant="h5" className="header-message text-center mt-5">
@@ -144,9 +172,9 @@ const chatWithDoctor = () => {
                 <List>
                     <ListItem button key="RemySharp">
                         <ListItemIcon>
-                        <Avatar alt="Remy Sharp" src={user?user.dat2.photo:""} />
+                        <Avatar alt="Remy Sharp" src={user?user.photo:""} />
                         </ListItemIcon>
-                        <ListItemText primary={user?user.dat1.name:""}></ListItemText>
+                        <ListItemText primary={user?user.name:""}></ListItemText>
                     </ListItem>
                 </List>
                 <Divider />
@@ -157,7 +185,7 @@ const chatWithDoctor = () => {
 
                 <List>
                     {
-                        doctors.length>0? doctors.map((dat)=>{
+                        users.length>0? users.map((dat)=>{
                             return(
                                 <ListItem button  key="RemySharp" onClick={()=>{handleMessage(dat._id,dat.name,dat.photo)}}>
                                 <ListItemIcon>
@@ -184,10 +212,10 @@ const chatWithDoctor = () => {
                         <ListItem key="1">
                         <Grid container>
                             <Grid item xs={12}>
-                                <ListItemText align="right" primary={m.msg_text}></ListItemText>
+                                <ListItemText align="left" color="primary" primary={m.msg_text}></ListItemText>
                             </Grid>
                             <Grid item xs={12}>
-                                <ListItemText align="right" secondary={m.msg_time}></ListItemText>
+                                <ListItemText align="left" secondary={m.msg_time}></ListItemText>
                             </Grid>
                         </Grid>
                       </ListItem>
@@ -198,10 +226,10 @@ const chatWithDoctor = () => {
                         <ListItem key="2">
                         <Grid container>
                             <Grid item xs={12}>
-                                <ListItemText align="left" primary={m.msg_text}></ListItemText>
+                                <ListItemText align="right" primary={m.msg_text}></ListItemText>
                             </Grid>
                             <Grid item xs={12}>
-                                <ListItemText align="left" secondary={m.msg_time}></ListItemText>
+                                <ListItemText align="right" secondary={m.msg_time}></ListItemText>
                             </Grid>
                         </Grid>
                     </ListItem>
@@ -220,30 +248,29 @@ const chatWithDoctor = () => {
 
                
 
-    
-
-
-
-            </Grid>
-            {
+    {
         load?
-                <Grid container style={{paddingLeft: '400px'}}>
-                    <Grid item xs={6}>
+                <Grid container style={{padding: '20px'}}>
+                    <Grid item xs={11}>
                         <TextField id="oulined-basic-email"
                         name="msg"
                         onChange={(e)=>{setMessage(e.target.value)}}
                         value={message}
                         label="Type Something" fullWidth />
                     </Grid>
-                    <Grid xs={1} align="right">
-                        <Fab color="primary" aria-label="add"><SendIcon onClick={sendMessage}/></Fab>
+                    <Grid xs={1} align="right" onClick={sendMessage}>
+                        <Fab color="primary" aria-label="add"><SendIcon /></Fab>
                     </Grid>
                 </Grid>:<></>
     }
 
+
+
+
+            </Grid>
         </Grid>
       </div>
   );
 }
 
-export default chatWithDoctor;
+export default chatWithUser;
